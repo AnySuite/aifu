@@ -408,6 +408,9 @@ table.pv tr.skip td{color:var(--text-faint)}
 .dside{position:sticky;top:calc(var(--ledgerH,64px) + var(--tabH,52px) + var(--needH,32px) + 10px);max-height:calc(100vh - var(--ledgerH,64px) - var(--tabH,52px) - var(--needH,32px) - 24px);overflow:auto;display:flex;flex-direction:column;gap:14px}
 .dside .cont{margin:0;padding:12px 14px} .dside .cont h2{font-size:15px;margin:0 0 8px}
 .dside .ckrow{font-size:12.5px;gap:8px}
+/* the gem list's tag cell: every tag of the player in ONE grid cell (a Sleeper tag next to a Gem tag pushed the row's
+   cells one slot over and the buttons onto a new line, 12 Oct 2026). Fixed width so the names line up. */
+#gemTable .cktags{display:inline-flex;gap:4px;align-items:center;width:132px} #gemTable .cktags .tg{margin-left:0}
 @media (max-width:1180px){.draftgrid{grid-template-columns:1fr} .dside{position:static;max-height:none}}
 .notesgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:22px;margin-bottom:22px}
 .notesgrid .cont{margin-bottom:0}
@@ -2872,7 +2875,7 @@ function renderGemWatch(){
     +`<button class="chipbtn ${gemTaken?'on':''}" onclick="gemTaken=!gemTaken;renderGemWatch()">${gemTaken?'Hide':'Show'} taken</button>`;
   tb.innerHTML=list.length?list.map(({g,q,st})=>{ const nmJ=q.name.replace(/'/g,"\\'"), mine=st&&st.status==='won'&&st.mine;
     const act=st?`<span class="mini"><button class="btn ghost" onclick="undo('${nmJ}')">undo</button></span>`:`<span class="mini"><button class="btn act-won" onclick="markWon('${nmJ}',true)">won</button><button class="btn act-gone" onclick="markGone('${nmJ}')">gone</button></span>`;
-    return `<div class="ckrow ${st?'done':''}">${gemTag(q.name).trim()}<span class="nm" title="${String(g.why||('Worth $'+g.worth+' (Blend $), usually sells for $'+g.med)).replace(/"/g,'&quot;')}"><a href="#" onclick="return openCall('${nmJ}')">${q.name}</a><span class="sub">${q.tm||''} · ${q.ypos||''} · usual $${g.med}${g.ch!=null?' · '+g.ch+'% at $3':''}${g.tier==='val'?' · worth $'+g.worth:''}${st?(mine?' · <b style="color:var(--good)">yours $'+st.price+'</b>':' · gone'):''}</span></span><span class="num"><b>${typeof q.cap==='number'?'cap $'+q.cap:q.cap}</b></span>${act}</div>`; }).join('')
+    return `<div class="ckrow ${st?'done':''}"><span class="cktags">${gemTag(q.name).trim()}</span><span class="nm" title="${String(g.why||('Worth $'+g.worth+' (Blend $), usually sells for $'+g.med)).replace(/"/g,'&quot;')}"><a href="#" onclick="return openCall('${nmJ}')">${q.name}</a><span class="sub">${q.tm||''} · ${q.ypos||''} · usual $${g.med}${g.ch!=null?' · '+g.ch+'% at $3':''}${g.tier==='val'?' · worth $'+g.worth:''}${st?(mine?' · <b style="color:var(--good)">yours $'+st.price+'</b>':' · gone'):''}</span></span><span class="num"><b>${typeof q.cap==='number'?'cap $'+q.cap:q.cap}</b></span>${act}</div>`; }).join('')
     :'<div class="contnote" style="margin-top:0">All taken.</div>';
 }
 
